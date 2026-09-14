@@ -1,9 +1,33 @@
 "use client"
+import { useState } from "react";
+import { note } from "./utils/types";
+
 
 const Home = () => {
+const [note, setnote] = useState<note>({title:"",text:""})
 
+function handleChange(e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){
+ setnote({...note,[e.target.name]:e.target.value} )
+console.log(note)
+}
 
+async function handleNotefn(){
+   try {
+       
+    const response=await fetch('app/api/savenote') // to be completed
+      
+   } catch (error:unknown) {
+       
+    if (error instanceof Error){
+       alert('something went wrong')
+    console.log(error ,'from line 20 ') // toberemoved
+    }
+    else{
+      console.log('something was thrown')
+    }
 
+   }
+}
 
   return (
       <div className="maincont flex justify-center h-screen items-center bg-green-500">
@@ -12,12 +36,17 @@ const Home = () => {
             
             
 
-                <input type="text" placeholder="Enter Title..." className="h-[20%] w-full text-center outline-none focus:outline-none focus:ring-0 placeholder:text-3xl placeholder:font-bold text-2xl" />
+                <input onChange={handleChange}
+                 type="text" name="title" value={note.title} placeholder="Enter Title..." className="h-[20%] w-full text-center outline-none focus:outline-none focus:ring-0 placeholder:text-3xl placeholder:font-bold text-2xl" />
 
 
 
 
-                <textarea placeholder="Text here" className="h-[80%] boder-2 border-red-500 w-full text-center -indent-5 outline-none focus:outline-none focus:ring-0 placeholder:text-2xl placeholder:font-bold"></textarea>
+                <textarea onChange={handleChange} placeholder="Text here" name="text" value={note.text} className="h-[65%]  w-full text-center -indent-5 outline-none focus:outline-none focus:ring-0 placeholder:text-2xl placeholder:font-bold"></textarea>
+
+                <button onClick={handleNotefn} type="button" className="w-[85%] rounded-md bg-white px-6 py-3 text-sm font-semibold text-black shadow-sm transition-colors hover:bg-zinc-200 cursor-pointer focus:outline-none  ">
+                  Save note
+                </button>
 
             
             
