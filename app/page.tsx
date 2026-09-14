@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react";
 import { note } from "./utils/types";
+import { title } from "process";
 
 
 const Home = () => {
@@ -11,15 +12,33 @@ function handleChange(e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement
 console.log(note)
 }
 
-async function handleNotefn(){
+async function handleNotefn():Promise<void>{
    try {
        
-    const response=await fetch('app/api/savenote') // to be completed
+    const finalNote={
+      ...note,
+      title: note.title?.trim() === "" ? "Unknown" : note.title
+    }
+     // did not need to set the state again as ux will be degraded
+
+    const response=await fetch('/api/savenote', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(finalNote),
+})    
+
+    const data=await response.json();
+
+    if (data.success){
+      setnote({text:"",title:""})
+    }
+    // alert(data.message)
+
       
    } catch (error:unknown) {
        
     if (error instanceof Error){
-       alert('something went wrong')
+      //  alert('something went wrong')
     console.log(error ,'from line 20 ') // toberemoved
     }
     else{
