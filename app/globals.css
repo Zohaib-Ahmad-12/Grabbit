@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #09090b;
+  --foreground: #f4f4f5;
 }
 
 @theme inline {
@@ -11,15 +11,19 @@
   --font-sans: var(--font-poppins);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-poppins), sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button:focus,
+input:focus,
+textarea:focus {
+  outline: none;
+  box-shadow: none;
 }
