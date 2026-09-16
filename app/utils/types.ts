@@ -3,3 +3,11 @@ export interface note{
     title?:string,
     text:string,
 }
+
+export type PopupProps={
+
+    note:note | null
+    onGoback:()=> void
+   
+
+}
