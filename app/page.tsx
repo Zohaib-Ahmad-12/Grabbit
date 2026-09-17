@@ -12,12 +12,27 @@ const Home = () => {
     fetchNotes();
   }, [])
 
+
+   
+
   const [note, setnote] = useState<note>({ title: "", text: "" })
   const [Allnotes, setAllnotes] = useState<note[]>([])
   const [search, setsearch] = useState<string>("")
   const [popup, setpopup] = useState<boolean>(false)
   const [selectedNote, setselectedNote] = useState<note | null>(null)
 
+      
+  const handleDeletefn=(id:number) => {
+    
+    const filtered=Allnotes.filter((item) => {
+          return item.id !== id
+    }
+    )
+
+    setAllnotes(filtered); // for quick ui update and to avoid an extra get api call
+  }
+  
+    
   async function fetchNotes() {
 
     try {
@@ -98,7 +113,7 @@ const Home = () => {
   return (
   <>
     {popup ? (
-      <Popup note={selectedNote} onGoback={()=> {setpopup(false)}} />
+      <Popup note={selectedNote} onGoback={()=> {setpopup(false)}} onDelete={handleDeletefn} />
     ) : (
       <div className="maincont min-h-screen bg-zinc-950 text-zinc-100 flex">
 

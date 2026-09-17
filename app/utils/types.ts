@@ -8,6 +8,7 @@ export type PopupProps={
 
     note:note | null
     onGoback:()=> void
+    onDelete : (id:number)=> void
    
 
 }
