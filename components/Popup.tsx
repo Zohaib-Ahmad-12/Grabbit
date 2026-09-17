@@ -37,14 +37,14 @@ const Popup = ({note,onGoback,onDelete}:PopupProps) => {
 
  
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 backdrop-blur-[2px]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 backdrop-blur-[2px] max-sm:overflow-y-auto max-sm:py-4">
 
-  <div className="w-full max-w-4xl rounded-xl border border-zinc-800/80 bg-zinc-950 p-8 shadow-2xl">
+  <div className="max-h-[calc(100vh-2rem)] w-full max-w-4xl overflow-y-auto rounded-xl border border-zinc-800/80 bg-zinc-950 p-8 shadow-2xl max-sm:max-h-[calc(100dvh-2rem)] max-sm:p-5">
 
    
     <div className="mb-8 flex items-center justify-between">
 
-      <h2 className="text-3xl font-semibold text-zinc-100">
+      <h2 className="text-3xl font-semibold text-zinc-100 max-sm:text-2xl">
         Note Details
       </h2>
 
@@ -104,8 +104,10 @@ const Popup = ({note,onGoback,onDelete}:PopupProps) => {
       </label>
 
       <div className="
-        min-h-[300px]
+        min-h-75
         w-full
+        max-sm:min-h-60
+        max-sm:wrap-break-word
         whitespace-pre-wrap
         rounded-xl
         border
@@ -124,13 +126,15 @@ const Popup = ({note,onGoback,onDelete}:PopupProps) => {
 
 
    
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-between max-sm:flex-col-reverse max-sm:gap-3">
 
     
       <button
         onClick={onGoback}
         className="
           flex
+          max-sm:w-full
+          max-sm:justify-center
           cursor-pointer
           items-center
           gap-2
@@ -170,13 +174,14 @@ const Popup = ({note,onGoback,onDelete}:PopupProps) => {
 
 
       
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 max-sm:grid max-sm:w-full max-sm:grid-cols-2">
         <button
           onClick={() => {
             copyClipboard(note?.text!)
           }}
           className="
             flex
+            max-sm:justify-center
             cursor-pointer
             items-center
             gap-2
@@ -229,6 +234,7 @@ const Popup = ({note,onGoback,onDelete}:PopupProps) => {
           type="button"
           className="
             flex
+            max-sm:justify-center
             cursor-pointer
             items-center
             gap-2

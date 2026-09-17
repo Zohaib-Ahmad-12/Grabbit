@@ -115,10 +115,10 @@ const Home = () => {
     {popup ? (
       <Popup note={selectedNote} onGoback={()=> {setpopup(false)}} onDelete={handleDeletefn} />
     ) : (
-      <div className="maincont min-h-screen bg-zinc-950 text-zinc-100 flex">
+      <div className="maincont min-h-screen bg-zinc-950 text-zinc-100 flex max-lg:flex-col">
 
        
-        <div className="left flex h-screen w-[34%] flex-col px-14 py-12">
+        <div className="left flex h-screen w-[34%] flex-col px-14 py-12 max-lg:h-auto max-lg:min-h-[70svh] max-lg:w-full max-lg:px-5 max-lg:py-7 sm:max-lg:px-8 sm:max-lg:py-10">
 
           <input
             onChange={handleChange}
@@ -136,6 +136,7 @@ const Home = () => {
               text-zinc-100
               placeholder:text-zinc-500
               placeholder:font-semibold
+              max-sm:text-3xl
             "
           />
 
@@ -148,6 +149,8 @@ const Home = () => {
               mt-10
               w-full
               flex-1
+              max-lg:min-h-48
+              max-lg:mt-8
               resize-none
               bg-transparent
               border-none
@@ -181,6 +184,8 @@ const Home = () => {
               hover:border-zinc-700
               hover:bg-zinc-800
               cursor-pointer
+              max-sm:w-full
+              max-sm:justify-center
             "
           >
             <svg
@@ -204,7 +209,7 @@ const Home = () => {
 
 
       
-        <div className="right min-h-screen w-[66%] px-14 py-12">
+        <div className="right min-h-screen w-[66%] px-14 py-12 max-lg:min-h-0 max-lg:w-full max-lg:px-5 max-lg:py-8 sm:max-lg:px-8 sm:max-lg:py-10">
 
           
           <div className="topsearchbar relative w-full">
@@ -262,7 +267,7 @@ const Home = () => {
 
 
          
-          <div className="boxes mt-11 grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="boxes mt-11 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 max-sm:mt-8">
 
             {filtered.map((note) => {
               return (
@@ -282,6 +287,9 @@ const Home = () => {
                     transition
                     hover:border-zinc-700
                     hover:bg-zinc-900
+                    max-sm:h-auto
+                    max-sm:min-h-28
+                    max-sm:p-5
                   "
                   onClick={() => {
                     setselectedNote(note) 
