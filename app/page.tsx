@@ -1,195 +1,334 @@
-"use client"
-import { useState } from "react";
-import { note } from "./utils/types";
-import { useEffect } from "react";
-import Popup from "@/components/Popup";
-
-
+'use client'
+import React from 'react'
+import type { UserAccess } from './utils/types'
+import { useState } from 'react'
 
 const Home = () => {
+  const [form, setform] = useState<UserAccess>({username:"",password:""})
 
-  useEffect(() => {
-    fetchNotes();
-  }, [])
-
-
-   
-
-  const [note, setnote] = useState<note>({ title: "", text: "" })
-  const [Allnotes, setAllnotes] = useState<note[]>([])
-  const [search, setsearch] = useState<string>("")
-  const [popup, setpopup] = useState<boolean>(false)
-  const [selectedNote, setselectedNote] = useState<note | null>(null)
-
-      
-  const handleDeletefn=(id:number) => {
-    
-    const filtered=Allnotes.filter((item) => {
-          return item.id !== id
-    }
-    )
-
-    setAllnotes(filtered); // for quick ui update and to avoid an extra get api call
+  function handleChange(e:React.ChangeEvent<HTMLInputElement>) {
+    setform({...form,[e.target.name]:e.target.value})
+    // console.log(form)
   }
-  
-    
-  async function fetchNotes() {
-
-    try {
-      const res = await fetch('/api/fetchnotes');
-
-      if (!res.ok){
-         console.log(`response was not ok , error ${res.status}`)
-      }
-      const data = await res.json()
-      console.log(data);
-
-      setAllnotes(data.result ?? []); 
-      
-    } catch (error:unknown) {
-      if (error instanceof Error){
-            alert('something went wrong')
-      }
-      else{
-        alert('something was thrown ')
-      }
-        
-    }
-  }
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
-    setnote({ ...note, [e.target.name]: e.target.value })
-    console.log(note)
-  }
-
-  async function handleNotefn(): Promise<void> {
-    try {
-
-      const finalNote = {
-        ...note,
-        title: note.title?.trim() === "" ? "Unknown" : note.title
-      }
-      // did not need to set the state again as ux will be degraded
-
-      if (finalNote.text.trim() === '') {
-        alert('please enter the text')
-        return;
-      }
-
-      const response = await fetch('/api/savenote', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(finalNote),
-      })
-
-      const data = await response.json();
-
-      if (data.success) {
-        fetchNotes()
-        setnote({ text: "", title: "" })
-      }
-      // alert(data.message)
-
-
-    } catch (error: unknown) {
-
-      if (error instanceof Error) {
-        //  alert('something went wrong')
-        console.log(error, 'from line 20 ') // toberemoved
-      }
-      else {
-        console.log('something was thrown')
-      }
-
-    }
-    
-  }
-
-  const filtered=Allnotes.filter((element) => {
-    return element.title?.trim().toLowerCase().includes(search.trim().toLowerCase())
-  }
-  )
-  
   return (
-  <>
-    {popup ? (
-      <Popup note={selectedNote} onGoback={()=> {setpopup(false)}} onDelete={handleDeletefn} />
-    ) : (
-      <div className="maincont min-h-screen bg-zinc-950 text-zinc-100 flex max-lg:flex-col">
+      <main className="flex min-h-screen items-center justify-center bg-zinc-950 px-4 py-8 text-zinc-100 sm:px-6">
+
+     
+      <div
+        className="
+          w-full
+          max-w-md
+          rounded-xl
+          border
+          border-zinc-800/80
+          bg-zinc-950
+          p-5
+          shadow-2xl
+          sm:p-8
+        "
+      >
 
        
-        <div className="left flex h-screen w-[34%] flex-col px-14 py-12 max-lg:h-auto max-lg:min-h-[70svh] max-lg:w-full max-lg:px-5 max-lg:py-7 sm:max-lg:px-8 sm:max-lg:py-10">
+        <div className="mb-7 flex flex-col items-center text-center sm:mb-8">
 
-          <input
-            onChange={handleChange}
-            type="text"
-            name="title"
-            value={note.title}
-            placeholder="Enter Title..."
-            className="
-              w-full
-              bg-transparent
-              border-none
-              outline-none
-              text-4xl
-              font-semibold
-              text-zinc-100
-              placeholder:text-zinc-500
-              placeholder:font-semibold
-              max-sm:text-3xl
-            "
-          />
+       
+          <div
+  className="
+    mb-4
+    flex
+    h-14
+    w-14
+    items-center
+    justify-center
+    rounded-xl
+    border
+    border-zinc-800
+    bg-zinc-900/50
+    sm:h-16
+    sm:w-16
+  "
+>
+  <svg
+    className="h-9 w-9 text-zinc-100 sm:h-10 sm:w-10"
+    viewBox="0 0 64 64"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    
+    <path
+      d="M21 25C17 18 15 8 19 6C24 4 27 15 28 23"
+      stroke="currentColor"
+      strokeWidth="4"
+      strokeLinecap="round"
+    />
 
-          <textarea
-            onChange={handleChange}
-            placeholder="Text here"
-            name="text"
-            value={note.text}
-            className="
-              mt-10
-              w-full
-              flex-1
-              max-lg:min-h-48
-              max-lg:mt-8
-              resize-none
-              bg-transparent
-              border-none
-              outline-none
-              text-lg
-              leading-8
-              text-zinc-300
-              placeholder:text-zinc-500
-            "
-          />
+    <path
+      d="M36 23C37 14 40 5 45 7C49 9 46 19 42 26"
+      stroke="currentColor"
+      strokeWidth="4"
+      strokeLinecap="round"
+    />
 
+    <path
+      d="
+        M16 30
+        C16 23 21 19 29 19
+        H34
+        C42 19 48 24 48 32
+        V39
+        C48 48 41 54 32 54
+        H28
+        C19 54 13 48 13 39
+        V32
+        C13 31 14 30 16 30
+        Z
+      "
+      fill="currentColor"
+    />
+
+
+    <circle
+      cx="24"
+      cy="32"
+      r="2"
+      fill="rgb(24 24 27)"
+    />
+
+    <circle
+      cx="39"
+      cy="32"
+      r="2"
+      fill="rgb(24 24 27)"
+    />
+
+    
+    <path
+      d="M29 38C30 37 34 37 35 38C34 40 30 40 29 38Z"
+      fill="rgb(24 24 27)"
+    />
+
+    <path
+      d="M32 40V43M32 43C29 46 27 44 26 43M32 43C35 46 37 44 38 43"
+      stroke="rgb(24 24 27)"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+  </svg>
+</div>
+
+          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+            Grabbit
+          </h1>
+
+          <p className="mt-1.5 text-sm text-zinc-500 sm:mt-2">
+            Admin Login
+          </p>
+
+        </div>
+
+
+        {/* Form */}
+        <form className="space-y-5">
+
+          {/* Username */}
+          <div>
+            <label
+              htmlFor="username"
+              className="mb-2 block text-sm font-medium text-zinc-400"
+            >
+              Username
+            </label>
+
+            <div className="relative">
+
+              <svg
+                className="
+                  pointer-events-none
+                  absolute
+                  left-4
+                  top-1/2
+                  h-5
+                  w-5
+                  -translate-y-1/2
+                  text-zinc-500
+                "
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="1.8"
+                  d="M20 21a8 8 0 00-16 0M12 13a4 4 0 100-8 4 4 0 000 8z"
+                />
+              </svg>
+
+              <input
+                id="username"
+                name="username"
+                type="text"
+                value={form.username}
+                onChange={handleChange}
+                placeholder="Enter your username"
+                className="
+                  h-13
+                  w-full
+                  rounded-xl
+                  border
+                  border-zinc-800
+                  bg-zinc-900/50
+                  pl-12
+                  pr-4
+                  text-sm
+                  text-zinc-100
+                  outline-none
+                  transition-colors
+                  placeholder:text-zinc-600
+                  focus:border-zinc-700
+                "
+              />
+
+            </div>
+          </div>
+
+
+          {/* Password */}
+          <div>
+            <label
+              htmlFor="password"
+              className="mb-2 block text-sm font-medium text-zinc-400"
+            >
+              Password
+            </label>
+
+            <div className="relative">
+
+              <svg
+                className="
+                  pointer-events-none
+                  absolute
+                  left-4
+                  top-1/2
+                  h-5
+                  w-5
+                  -translate-y-1/2
+                  text-zinc-500
+                "
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <rect
+                  x="5"
+                  y="10"
+                  width="14"
+                  height="11"
+                  rx="2"
+                  strokeWidth="1.8"
+                />
+
+                <path
+                  strokeLinecap="round"
+                  strokeWidth="1.8"
+                  d="M8 10V7a4 4 0 018 0v3"
+                />
+              </svg>
+
+              <input
+                id="password"
+                name="password"
+                type="password"
+                value={form.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                className="
+                  h-13
+                  w-full
+                  rounded-xl
+                  border
+                  border-zinc-800
+                  bg-zinc-900/50
+                  pl-12
+                  pr-12
+                  text-sm
+                  text-zinc-100
+                  outline-none
+                  transition-colors
+                  placeholder:text-zinc-600
+                  focus:border-zinc-700
+                "
+              />
+
+              {/* Password visibility */}
+              <button
+                type="button"
+                className="
+                  absolute
+                  right-4
+                  top-1/2
+                  -translate-y-1/2
+                  cursor-pointer
+                  text-zinc-500
+                  transition-colors
+                  hover:text-zinc-300
+                "
+                aria-label="Show password"
+              >
+                <svg
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.8"
+                    d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"
+                  />
+
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="2.5"
+                    strokeWidth="1.8"
+                  />
+                </svg>
+              </button>
+
+            </div>
+          </div>
+
+
+          {/* Login Button */}
           <button
-            onClick={handleNotefn}
-            type="button"
+            type="submit"
             className="
-              self-start
-              mt-8
+              mt-2
               flex
+              h-13
+              w-full
+              cursor-pointer
               items-center
+              justify-center
               gap-3
               rounded-xl
               border
-              border-zinc-800
+              border-zinc-700
               bg-zinc-900
-              px-6
-              py-3
               text-sm
-              font-medium
-              text-zinc-200
-              transition
-              hover:border-zinc-700
+              font-semibold
+              text-zinc-100
+              transition-colors
+              hover:border-zinc-600
               hover:bg-zinc-800
-              cursor-pointer
-              max-sm:w-full
-              max-sm:justify-center
             "
           >
+            Login
+
             <svg
-              className="h-4 w-4"
+              className="h-5 w-5"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -198,117 +337,17 @@ const Home = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="2"
-                d="M5 13l4 4L19 7"
+                d="M5 12h14m-6-6l6 6-6 6"
               />
             </svg>
-
-            Save note
           </button>
 
-        </div>
-
-
-      
-        <div className="right min-h-screen w-[66%] px-14 py-12 max-lg:min-h-0 max-lg:w-full max-lg:px-5 max-lg:py-8 sm:max-lg:px-8 sm:max-lg:py-10">
-
-          
-          <div className="topsearchbar relative w-full">
-
-            <input
-              type="text"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setsearch(e.target.value)
-              }}
-              value={search}
-              placeholder="Search your notes..."
-              aria-label="Search your notes"
-              className="
-                h-14
-                w-full
-                rounded-xl
-                border
-                border-zinc-800
-                bg-zinc-900/70
-                px-5
-                pr-12
-                text-sm
-                text-zinc-100
-                outline-none
-                transition
-                placeholder:text-zinc-600
-                focus:border-zinc-700
-              "
-            />
-
-            <svg
-              className="
-                absolute
-                right-5
-                top-1/2
-                h-5
-                w-5
-                -translate-y-1/2
-                text-zinc-400
-                pointer-events-none
-              "
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-
-          </div>
-
-
-         
-          <div className="boxes mt-11 grid w-full grid-cols-1 gap-4 sm:grid-cols-2 max-sm:mt-8">
-
-            {filtered.map((note) => {
-              return (
-                <div
-                  key={note.id}
-                  className=" box
-                    h-36
-                    cursor-pointer
-                    rounded-xl
-                    border
-                    border-zinc-800/80
-                    bg-zinc-900/50
-                    p-6
-                    text-xl
-                    font-semibold
-                    text-zinc-300
-                    transition
-                    hover:border-zinc-700
-                    hover:bg-zinc-900
-                    max-sm:h-auto
-                    max-sm:min-h-28
-                    max-sm:p-5
-                  "
-                  onClick={() => {
-                    setselectedNote(note) 
-                    setpopup(true)
-                  }}
-                >
-                  {note.title}
-                </div>
-              )
-            })}
-
-          </div>
-
-        </div>
+        </form>
 
       </div>
-    )}
-  </>
-);;
-};
 
-export default Home;
+    </main>
+  )
+}
+
+export default Home

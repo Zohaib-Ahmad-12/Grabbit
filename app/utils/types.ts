@@ -12,3 +12,8 @@ export type PopupProps={
    
 
 }
+
+export interface UserAccess{
+    username:string,
+    password:string
+}
