@@ -3,8 +3,10 @@ import React from 'react'
 import type { UserAccess } from './utils/types'
 import { useState } from 'react'
 import { encryptPassword } from './utils/algorithms'
+import { useRouter } from 'next/navigation'
 
 const Home = () => {
+  const router=useRouter()
   const [form, setform] = useState<UserAccess>({username:"",password:""})
 
   function handleChange(e:React.ChangeEvent<HTMLInputElement>) {
@@ -36,6 +38,7 @@ async function handleLoginReq():Promise<void> {
 
       if (data.success){
         console.log('successssss')
+        router.push('/authorized')
       }
 
 }
@@ -161,7 +164,7 @@ async function handleLoginReq():Promise<void> {
 
 
       
-        <form className="space-y-5">
+        <div className="space-y-5">
 
           
           <div>
@@ -336,8 +339,8 @@ async function handleLoginReq():Promise<void> {
 
           {/* Login Button */}
           <button
-          onClick={handleLoginReq}
-            type="submit"
+            onClick={handleLoginReq}
+            type="button"
             className="
               mt-2
               flex
@@ -376,7 +379,7 @@ async function handleLoginReq():Promise<void> {
             </svg>
           </button>
 
-        </form>
+        </div>
 
       </div>
 
