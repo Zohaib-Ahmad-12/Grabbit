@@ -2,6 +2,7 @@
 import React from 'react'
 import type { UserAccess } from './utils/types'
 import { useState } from 'react'
+import { encryptPassword } from './utils/algorithms'
 
 const Home = () => {
   const [form, setform] = useState<UserAccess>({username:"",password:""})
@@ -10,6 +11,38 @@ const Home = () => {
     setform({...form,[e.target.name]:e.target.value})
     // console.log(form)
   }
+
+async function handleLoginReq():Promise<void> {
+  
+  const passer = encryptPassword(form.password);
+
+  const newObject:UserAccess={
+   ...form,    
+    password:passer
+  }
+
+  const response = await fetch('/api/authorizeuser', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newObject),
+      })
+
+      if (!response.ok){
+        alert('something went wrong')
+        console.log(response.status)
+      }
+
+      const data=await response.json();
+
+      if (data.success){
+        console.log('successssss')
+      }
+
+}
+
+
+
+  
   return (
       <main className="flex min-h-screen items-center justify-center bg-zinc-950 px-4 py-8 text-zinc-100 sm:px-6">
 
@@ -127,10 +160,10 @@ const Home = () => {
         </div>
 
 
-        {/* Form */}
+      
         <form className="space-y-5">
 
-          {/* Username */}
+          
           <div>
             <label
               htmlFor="username"
@@ -193,7 +226,7 @@ const Home = () => {
           </div>
 
 
-          {/* Password */}
+          
           <div>
             <label
               htmlFor="password"
@@ -303,6 +336,7 @@ const Home = () => {
 
           {/* Login Button */}
           <button
+          onClick={handleLoginReq}
             type="submit"
             className="
               mt-2

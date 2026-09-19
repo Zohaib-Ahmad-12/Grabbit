@@ -45,7 +45,8 @@ const Page = () => {
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     setnote({ ...note, [e.target.name]: e.target.value })
-    console.log(note)
+    
+    // console.log(note)
   }
 
   async function handleNotefn(): Promise<void> {
@@ -123,7 +124,7 @@ const Page = () => {
             </button>
           </div>
 
-          {/* RIGHT SIDE (Added missing wrapper to fix the syntax error) */}
+         
           <div className="right flex-1 w-full flex flex-col px-14 py-12 max-lg:px-5 max-lg:py-7 sm:max-lg:px-8 sm:max-lg:py-10">
             
             <div className="topsearchbar relative w-full">
@@ -164,9 +165,9 @@ const Page = () => {
               })}
             </div>
 
-          </div> {/* Closes right side */}
+          </div>
 
-        </div> /* Closes maincont */
+        </div> 
       )}
     </>
   );
