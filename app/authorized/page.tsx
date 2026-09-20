@@ -35,11 +35,7 @@ const Page = () => {
       setAllnotes(data.result ?? []);
 
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        alert('something went wrong')
-      } else {
-        alert('something was thrown ')
-      }
+       console.log('something went wrong')
     }
   }
 
@@ -57,7 +53,7 @@ const Page = () => {
       }
 
       if (finalNote.text.trim() === '') {
-        alert('please enter the text')
+      
         return;
       }
 

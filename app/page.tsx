@@ -30,7 +30,7 @@ async function handleLoginReq():Promise<void> {
       })
 
       if (!response.ok){
-        alert('something went wrong')
+       
         console.log(response.status)
       }
 
